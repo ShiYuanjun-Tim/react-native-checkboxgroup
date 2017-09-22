@@ -94,7 +94,8 @@ export class CheckBoxGroup extends React.Component<Prop,{isSelected: boolean}> i
 	constructor(props: Prop, context: any) {
 		super(props, context);
 
-		this.keys=React.Children.map(this.props.children, () => "Item_"+Math.ceil( Math.random()*10000000))
+		this.keys=React.Children.map(this.props.children, (e) =>
+			(this.isSelectableComp(e)?"Group_":"Item_")+Math.ceil( Math.random()*10000000))
 		this.bs = new BitSwitcher(...this.keys)
 	}
 
@@ -139,21 +140,21 @@ export class CheckBoxGroup extends React.Component<Prop,{isSelected: boolean}> i
 	render() {
 		console.log("CheckboxGroup render")
 
-		// let this = this;
+		let that = this;
 		let enrichProps= (ownKey:string)=>{
 			console.log("ownKey",ownKey)
 			return {
 				identifier:ownKey,
 				key:ownKey,
-				ref(item:Selectable){
-					item&&(this as any).addItem( ownKey,item)
+				ref:(item:Selectable)=>{
+					item&&(that as any).addItem( ownKey,item)
 				},
-				selectedChanged(childKey:string,isSelected:boolean){
-					isSelected?(this as any).bs.on(childKey):(this as any).bs.off(childKey);
-					let nextGrpState = (this as any).bs.isAllOn();
-					if(nextGrpState!=(this as any).state.isSelected){
-						(this as any).setState({isSelected:nextGrpState})
-						(this as any).props.selectedChanged&&(this as any).props.selectedChanged(ownKey,nextGrpState)
+				selectedChanged:(childKey:string,isSelected:boolean)=>{
+					isSelected?(that as any).bs.on(childKey):(that as any).bs.off(childKey);
+					let nextGrpState = (that as any).bs.isAllOn();
+					if(nextGrpState!=(that as any).state.isSelected){
+						(that as any).setState({isSelected:nextGrpState})
+						(that as any).props.selectedChanged&&(that as any).props.selectedChanged(ownKey,nextGrpState)
 					}
 				}
 			}

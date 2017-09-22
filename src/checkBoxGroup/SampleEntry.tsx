@@ -38,7 +38,7 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 					Cmd+D or shake for dev menu
 				</Text>
 
-				<CheckBoxGroup >
+				<CheckBoxGroup identifier="GOD">
 					<CheckBoxGroup >
 						<Text>{this.state.a}</Text>
 						<Text>122222</Text>
