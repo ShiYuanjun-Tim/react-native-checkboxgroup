@@ -14,7 +14,7 @@ import {
 	Text,
 	View
 } from 'react-native';
-import {CheckBoxItem,CheckBoxGroup} from "./CheckBoxItem"
+import CheckBoxGroup from "./CheckBoxGroup"
 
 export default class MyAwesomeProject extends React.Component<object, {a:number}> {
   state={
