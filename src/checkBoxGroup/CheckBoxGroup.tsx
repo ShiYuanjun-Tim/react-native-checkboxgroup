@@ -8,7 +8,7 @@ import {Selectable, IDENTIFIER} from "./Selectable";
 import CheckBoxItem from "./CheckBoxItem";
 import ReactElement = React.ReactElement;
 
-interface  Prop {
+export interface  Prop {
 	selectedChanged?: (key: string, isSelected: boolean) => void;
 	children: React.ReactNode;
 	identifier?: string;
@@ -57,7 +57,6 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 
 	toggle() {
 		let isSelectedNext = !this.state.isSelected
-		this.setState({isSelected: isSelectedNext})
 		if (isSelectedNext) {
 			this.select()
 		} else {
@@ -115,9 +114,11 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 
 		})
 
-		return <View style={{ }}>
-			<Text onPress={()=>{this.toggle()}}>{this.state.isSelected ? "On" : "Off"} {this.props.identifier} </Text>
-			{ children }
+		return <View >
+			<Text onPress={()=>{this.toggle()}}>{this.state.isSelected ? "On" : "Off"}  </Text>
+			<View style={{ paddingLeft:20}}>
+				{ children }
+			</View>
 		</View>
 	}
 

@@ -6,7 +6,7 @@ import {Text, View} from "react-native";
 import {Selectable, IDENTIFIER} from "./Selectable";
 import ReactElement = React.ReactElement;
 
-interface SelectableProps {
+export interface SelectableProps {
 	selectedChanged: (key: string, isSelected: boolean) => void;
 	ref: string|Function;
 	identifier: string;
@@ -46,7 +46,7 @@ export default class CheckBoxItem extends React.Component<SelectableProps,{isSel
 	render() {
 		console.log("CheckboxItem render")
 		return <View style={{flexDirection:"row"}}>
-			<Text onPress={()=>{this.toggle()}}>{this.state.isSelected ? "On" : "Off"} {this.props.identifier} </Text>
+			<Text onPress={()=>{this.toggle()}}>{this.state.isSelected ? "On" : "Off"}  </Text>
 			{this.props.children}
 		</View>
 	}
