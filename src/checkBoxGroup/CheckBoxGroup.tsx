@@ -2,20 +2,37 @@
  * Created by syjmac on 2017/9/23.
  */
 import * as React from "react";
-import {Text, View} from "react-native";
+import {Text, View,TouchableOpacity,StyleSheet} from "react-native";
 import BitSwitcher from "./BitSwitcher";
 import {Selectable, IDENTIFIER} from "./Selectable";
 import CheckBoxItem from "./CheckBoxItem";
 import ReactElement = React.ReactElement;
 
 export interface  Prop {
+	isGroupTitleBarVisiable?:boolean;
+	renderTitle?:()=>React.ReactElement<any>;
+	/*自定义 选中状态 用方法*/
+	renderCheckBox?:(isSelected:boolean)=>React.ReactElement<any>;
+
+	style?:object;
+	/*  ********以下为内部使用 *********/
+	/*用于组件内部状态改变时候进行往上级传递使用*/
 	selectedChanged?: (key: string, isSelected: boolean) => void;
 	children: React.ReactNode;
+	/*内部使用标记*/
 	identifier?: string;
 }
 
 export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boolean}> implements Selectable {
 	static IDENTIFIER = IDENTIFIER
+
+	static defaultProps={
+		renderCheckBox:(isSelected:boolean)=>{
+			return <Text>{isSelected? "On" : "Off"}  </Text>
+		},
+		renderTitle:()=>{return null},
+		isGroupTitleBarVisiable:true
+	}
 
 	state = {
 		isSelected: false
@@ -55,7 +72,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		})
 	}
 
-	toggle() {
+	toggle=()=> {
 		let isSelectedNext = !this.state.isSelected
 		if (isSelectedNext) {
 			this.select()
@@ -93,17 +110,33 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			ref            : (item: Selectable) => {
 				item && this.addItem(ownKey, item)
 			},
-			selectedChanged: this.selectedChanged
+			selectedChanged: this.selectedChanged,
+			renderCheckBox:this.props.renderCheckBox
 		}
 	};
+
+	private getTitleBar(){
+		let { renderCheckBox,isGroupTitleBarVisiable,renderTitle} = this.props;
+		return isGroupTitleBarVisiable
+			?<View style={sts.groupTitleBar}>
+				<TouchableOpacity onPress={this.toggle} style={{}}>
+					{renderCheckBox&&renderCheckBox(this.state.isSelected)}
+				</TouchableOpacity>
+				{renderTitle&&renderTitle()}
+			</View>
+			:null;
+	}
 
 	render() {
 		console.log("CheckboxGroup render")
 
+		let {style} = this.props;
 		let children = React.Children.map(this.props.children, (reactChild, index) => {
 			let key = this.keys[index];
 			if (this.isSelectableComp(reactChild)) {
-				return React.cloneElement((reactChild as React.ReactElement<any>), {...this.enrichChildProps(key)})
+				return React.cloneElement((reactChild as React.ReactElement<any>), {
+					...this.enrichChildProps(key)
+				})
 			} else {
 				return (
 					<CheckBoxItem {...this.enrichChildProps(key)}>
@@ -111,15 +144,22 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 					</CheckBoxItem>
 				)
 			}
-
 		})
 
-		return <View >
-			<Text onPress={()=>{this.toggle()}}>{this.state.isSelected ? "On" : "Off"}  </Text>
-			<View style={{ paddingLeft:20}}>
+		return <View style={style}>
+			{this.getTitleBar()}
+			<View style={[]}>
 				{ children }
 			</View>
 		</View>
 	}
 
 }
+
+
+const sts=StyleSheet.create({
+
+	groupTitleBar:{
+		flexDirection:"row"
+	}
+})

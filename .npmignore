@@ -1,0 +1,4 @@
+android/
+ios/
+/index.*.js
+*.js.map

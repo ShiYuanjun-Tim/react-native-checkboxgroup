@@ -2,11 +2,12 @@
  * Created by syjmac on 2017/9/19.
  */
 import * as React from "react";
-import {Text, View} from "react-native";
+import {Text, View, TouchableOpacity} from "react-native";
 import {Selectable, IDENTIFIER} from "./Selectable";
 import ReactElement = React.ReactElement;
 
 export interface SelectableProps {
+	renderCheckBox?: (isSelected: boolean) => React.ReactElement<any>;
 	selectedChanged: (key: string, isSelected: boolean) => void;
 	ref: string|Function;
 	identifier: string;
@@ -18,7 +19,10 @@ export default class CheckBoxItem extends React.Component<SelectableProps,{isSel
 
 	static defaultProps = {
 		selectedChanged(k: string, isSelected: boolean): void{
-		}
+		},
+		renderCheckBox: (isSelected: boolean) => {
+			return <Text>{isSelected ? "On" : "Off"}  </Text>
+		},
 	}
 
 	state = {
@@ -33,7 +37,7 @@ export default class CheckBoxItem extends React.Component<SelectableProps,{isSel
 		this.setState({isSelected: false})
 	}
 
-	toggle() {
+	toggle = () => {
 		let current = this.state.isSelected
 		if (current) {
 			this.deselect()
@@ -44,9 +48,12 @@ export default class CheckBoxItem extends React.Component<SelectableProps,{isSel
 	}
 
 	render() {
+		let {renderCheckBox} = this.props
 		console.log("CheckboxItem render")
 		return <View style={{flexDirection:"row"}}>
-			<Text onPress={()=>{this.toggle()}}>{this.state.isSelected ? "On" : "Off"}  </Text>
+			<TouchableOpacity onPress={this.toggle} style={{justifyContent:"center",alignItems:"center"}}>
+				{renderCheckBox && renderCheckBox(this.state.isSelected)}
+			</TouchableOpacity>
 			{this.props.children}
 		</View>
 	}
