@@ -3,23 +3,14 @@
  */
 import * as React from "react";
 import {Text, View, TouchableOpacity} from "react-native";
-import {Selectable, IDENTIFIER} from "./Selectable";
+import {Selectable, IDENTIFIER,SelectableProps} from "./Selectable";
 import ReactElement = React.ReactElement;
 
-export interface SelectableProps {
-	/*自定义 选中状态 用方法*/
-	renderCheckBox?: (isSelected: boolean) => ReactElement<any>;
-	/*用户自定每个选项的布局，参数是自定义过的复选框和每一行的具体内容*/
-	rowTemplate?:(checkbox:ReactElement<any>,item:React.ReactNode)=>ReactElement<any>;
-
-	/*  ********以下为内部使用 *********/
-
-	/*用于组件内部状态改变时候进行往上级传递使用*/
-	children: React.ReactNode;
-}
 
 export interface ItemProps extends SelectableProps {
+	/*用于组件内部状态改变时候进行往上级传递使用*/
 	selectedChanged: (key: string, isSelected: boolean) => void;
+	/*内部使用标记 唯一id*/
 	identifier: string;
 	ref: string|Function;
 }

@@ -4,12 +4,14 @@
 import * as React from "react";
 import {Text, View,TouchableOpacity,StyleSheet} from "react-native";
 import BitSwitcher from "./BitSwitcher";
-import {Selectable, IDENTIFIER} from "./Selectable";
-import CheckBoxItem,{SelectableProps} from "./CheckBoxItem";
+import {Selectable, IDENTIFIER,SelectableProps} from "./Selectable";
+import CheckBoxItem from "./CheckBoxItem";
 import ReactElement = React.ReactElement;
 
 export interface  Prop  extends  SelectableProps{
+	/*组的标题栏是否有*/
 	isGroupTitleBarVisiable?:boolean;
+	/*渲染标题栏*/
 	renderTitle?:()=>React.ReactElement<any>;
 	/*自定义 选中状态 用方法*/
 	// renderCheckBox?:(isSelected:boolean)=>React.ReactElement<any>;
@@ -25,6 +27,7 @@ export interface  Prop  extends  SelectableProps{
 }
 
 export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boolean}> implements Selectable {
+
 	static IDENTIFIER = IDENTIFIER
 
 	static defaultProps={
@@ -49,11 +52,23 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		}
 	}
 
+	private _identifier:string;
+
+	private getRandomBum():number{
+		return (Math.ceil(Math.random() * 10000000))
+	}
+
 	constructor(props: Prop, context: any) {
 		super(props, context);
 
-		this.keys = React.Children.map(this.props.children, (e) =>
-		(this.isSelectableComp(e) ? "Group_" : "Item_") + Math.ceil(Math.random() * 10000000))
+		this._identifier = props.identifier||("Group_"+this.getRandomBum())
+
+		this.keys = React.Children.map(this.props.children, (e,index) =>
+			this._identifier+(this.isSelectableComp(e)
+				? ("_Group_"+this.getRandomBum())
+				: "_Item_") +index
+			)
+
 		this.bs = new BitSwitcher(...this.keys)
 	}
 
@@ -95,6 +110,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	private selectedChanged = (childKey: string, isSelected: boolean) => {
+		console.log("selectedChanged",childKey,isSelected?"ON":"OFF")
 		isSelected ? this.bs.on(childKey) : this.bs.off(childKey);
 		let nextGrpState = this.bs.isAllOn();
 		if (nextGrpState != this.state.isSelected) {
