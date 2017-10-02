@@ -72,6 +72,10 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		this.bs = new BitSwitcher(...this.keys)
 	}
 
+	componentWillReceiveProps(nextProps:Prop,nextState:Prop){
+		debugger
+	}
+
 	select(): void {
 		this.setState({isSelected: true})
 		this._items.forEach((v, k) => {
@@ -88,8 +92,8 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		})
 	}
 
-	toggle=()=> {
-		let isSelectedNext = !this.state.isSelected
+	toggle=(trueOrFalse?:boolean)=> {
+		let isSelectedNext = trueOrFalse==undefined? !this.state.isSelected :trueOrFalse;
 		if (isSelectedNext) {
 			this.select()
 		} else {
@@ -137,7 +141,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		let { renderCheckBox,isGroupTitleBarVisiable,renderTitle} = this.props;
 		return isGroupTitleBarVisiable
 			?<View style={sts.groupTitleBar}>
-				<TouchableOpacity onPress={this.toggle} style={{}}>
+				<TouchableOpacity onPress={()=>{this.toggle()}} style={{}}>
 					{renderCheckBox&&renderCheckBox(this.state.isSelected)}
 				</TouchableOpacity>
 				{renderTitle&&renderTitle()}
