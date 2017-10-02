@@ -7,14 +7,24 @@ import {Selectable, IDENTIFIER} from "./Selectable";
 import ReactElement = React.ReactElement;
 
 export interface SelectableProps {
-	renderCheckBox?: (isSelected: boolean) => React.ReactElement<any>;
-	selectedChanged: (key: string, isSelected: boolean) => void;
-	ref: string|Function;
-	identifier: string;
+	/*自定义 选中状态 用方法*/
+	renderCheckBox?: (isSelected: boolean) => ReactElement<any>;
+	/*用户自定每个选项的布局，参数是自定义过的复选框和每一行的具体内容*/
+	rowTemplate?:(checkbox:ReactElement<any>,item:React.ReactNode)=>ReactElement<any>;
+
+	/*  ********以下为内部使用 *********/
+
+	/*用于组件内部状态改变时候进行往上级传递使用*/
 	children: React.ReactNode;
 }
 
-export default class CheckBoxItem extends React.Component<SelectableProps,{isSelected: boolean}> implements Selectable {
+export interface ItemProps extends SelectableProps {
+	selectedChanged: (key: string, isSelected: boolean) => void;
+	identifier: string;
+	ref: string|Function;
+}
+
+export default class CheckBoxItem extends React.Component<ItemProps,{isSelected: boolean}> implements Selectable {
 	static IDENTIFIER = IDENTIFIER
 
 	static defaultProps = {
@@ -23,6 +33,12 @@ export default class CheckBoxItem extends React.Component<SelectableProps,{isSel
 		renderCheckBox: (isSelected: boolean) => {
 			return <Text>{isSelected ? "On" : "Off"}  </Text>
 		},
+		rowTemplate:(checkbox:ReactElement<any>,item:ReactElement<any>)=>{
+			return <View style={{flexDirection:"row"}}>
+				{checkbox}
+				{item}
+			</View>
+		}
 	}
 
 	state = {
@@ -48,13 +64,16 @@ export default class CheckBoxItem extends React.Component<SelectableProps,{isSel
 	}
 
 	render() {
-		let {renderCheckBox} = this.props
-		console.log("CheckboxItem render")
-		return <View style={{flexDirection:"row"}}>
+		let {renderCheckBox,rowTemplate} = this.props
+
+		let checkbox = (
 			<TouchableOpacity onPress={this.toggle} style={{justifyContent:"center",alignItems:"center"}}>
 				{renderCheckBox && renderCheckBox(this.state.isSelected)}
 			</TouchableOpacity>
-			{this.props.children}
+		)
+		console.log("CheckboxItem render")
+		return <View>
+			{rowTemplate&&rowTemplate(checkbox,this.props.children)}
 		</View>
 	}
 

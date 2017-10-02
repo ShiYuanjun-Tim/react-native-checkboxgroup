@@ -6,14 +6,11 @@
  * https://github.com/facebook/react-native
  * @flow
  */
+import * as React from "react";
+import {StyleSheet, Text, View, Button, Image} from "react-native";
+import CheckBoxGroup from "../checkBoxGroup";
 
-import * as React from 'react';
-import {
-	StyleSheet,
-	Text,ScrollView,
-	View,Button,Image
-} from 'react-native';
-import CheckBoxGroup from "../checkBoxGroup"
+const uri='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='
 
 export default class MyAwesomeProject extends React.Component<object, {a:number}> {
 
@@ -23,44 +20,63 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 
 
 	renderCheckBox=(isSel:boolean)=>{
-		return isSel
-			?<Image style={{width:20,height:20}} source={{uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='}}></Image>
-				:<Text>OFF</Text>
+		return <View style={{flex:1,width:24,backgroundColor:isSel?"#4ce40d":"#e08c0d",justifyContent:"center"}}>
+			<Text>{isSel?"On":"Off"}</Text>
+		</View>
+	}
+
+	rowTemplate=(checkbox:React.ReactElement<any>,item:React.ReactElement<any>)=>{
+			return <View style={{borderWidth:1,borderColor:"red",marginBottom:6}}>
+					<View style={{flexDirection:"row"}}>
+						{checkbox}
+						{item}
+					</View>
+					<View style={{backgroundColor:"yellow"}}><Text>bottom bar </Text></View>
+				</View>
+
 	}
 
 	render() {
 
 
-
-
 		return (
 				<View style={styles.container}  >
 
-					<Button title="toggle whole checkboxgroup2" onPress={()=>{
-					this.refs.checkgp.toggle()
+					<Button title="toggle whole checkboxgroup2"
+					        onPress={()=>{
+										this.refs.checkgp.toggle()
 				}}></Button>
 
 
-					<CheckBoxGroup
-					               renderTitle={()=>{return <Text>God bless U</Text>}}
-					               style={{backgroundColor:"gray"}}
+					<CheckBoxGroup rowTemplate = {this.rowTemplate}
+					               renderCheckBox={this.renderCheckBox}
+					               renderTitle={()=>{
+					               	return <View style={{backgroundColor:"#a0ff1b"}}><Text>Outter Group Title</Text></View>
+					               }}
+					               style={{backgroundColor:"transparent",padding:5}}
 					               ref="checkgp">
 
-						<CheckBoxGroup  style={{backgroundColor:"red",borderColor:"blue",borderWidth:1,marginBottom:20}}
-						                renderTitle={()=>{return <Text style={{color:"green"}}>Child Group</Text>}}
+						<CheckBoxGroup  style={{borderColor:"blue",borderWidth:1,marginBottom:20,padding:5}}
+						                renderTitle={()=>{
+					               	    return <View style={{backgroundColor:"#a0ff1b"}}><Text>Inner Group Title</Text></View>
+						                }}
 						>
-							<View style={[styles.item,{marginBottom:20}]}>
+							<View style={[styles.item]}>
 								<Text>balabala...</Text>
-								<Image style={{width:66,height:58}} source={{uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='}}></Image>
+								<Image style={styles.img}
+								       source={{uri:uri}}></Image>
 							</View>
 
-							<View style={[styles.item,{}]}>
+							<View style={[styles.item]}>
 								<Text>balabala. 111..</Text>
-								<Image style={{width:66,height:58}} source={{uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='}}></Image>
+								<Image style={styles.img}
+								       source={{uri:uri}}></Image>
 							</View>
-							<View style={[styles.item,{}]}>
+
+							<View style={[styles.item]}>
 								<Text>balabala..333.</Text>
-								<Image style={{width:66,height:58}} source={{uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='}}></Image>
+								<Image style={styles.img}
+								       source={{uri:uri}}></Image>
 							</View>
 
 							<Text>Grouo Item 122222</Text>
@@ -99,6 +115,10 @@ const styles = StyleSheet.create({
 	item:{
 		height:100,
 		width:300,
+		backgroundColor:"green"
+	},
+	img:{
+		width:66,height:58
 	}
 });
 

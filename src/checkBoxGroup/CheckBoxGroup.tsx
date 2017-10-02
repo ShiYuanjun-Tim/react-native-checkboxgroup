@@ -5,20 +5,21 @@ import * as React from "react";
 import {Text, View,TouchableOpacity,StyleSheet} from "react-native";
 import BitSwitcher from "./BitSwitcher";
 import {Selectable, IDENTIFIER} from "./Selectable";
-import CheckBoxItem from "./CheckBoxItem";
+import CheckBoxItem,{SelectableProps} from "./CheckBoxItem";
 import ReactElement = React.ReactElement;
 
-export interface  Prop {
+export interface  Prop  extends  SelectableProps{
 	isGroupTitleBarVisiable?:boolean;
 	renderTitle?:()=>React.ReactElement<any>;
 	/*自定义 选中状态 用方法*/
-	renderCheckBox?:(isSelected:boolean)=>React.ReactElement<any>;
+	// renderCheckBox?:(isSelected:boolean)=>React.ReactElement<any>;
+	// rowTemplate?:(checkbox:React.ReactElement<any>,item:React.ReactElement<any>)=>React.ReactElement<any>;
 
 	style?:object;
 	/*  ********以下为内部使用 *********/
 	/*用于组件内部状态改变时候进行往上级传递使用*/
 	selectedChanged?: (key: string, isSelected: boolean) => void;
-	children: React.ReactNode;
+	// children: React.ReactNode;
 	/*内部使用标记*/
 	identifier?: string;
 }
@@ -111,7 +112,8 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 				item && this.addItem(ownKey, item)
 			},
 			selectedChanged: this.selectedChanged,
-			renderCheckBox:this.props.renderCheckBox
+			renderCheckBox:this.props.renderCheckBox,
+			rowTemplate:this.props.rowTemplate
 		}
 	};
 
