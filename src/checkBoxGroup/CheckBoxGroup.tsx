@@ -7,6 +7,7 @@ import BitSwitcher from "./BitSwitcher";
 import {Selectable, IDENTIFIER,SelectableProps} from "./Selectable";
 import CheckBoxItem from "./CheckBoxItem";
 import ReactElement = React.ReactElement;
+import invariant from "./invariant"
 
 export interface  Prop  extends  SelectableProps{
 	/*组的标题栏是否有*/
@@ -24,6 +25,7 @@ export interface  Prop  extends  SelectableProps{
 	// children: React.ReactNode;
 	/*内部使用标记*/
 	identifier?: string;
+	key?:string;
 }
 
 export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boolean}> implements Selectable {
@@ -61,13 +63,15 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	constructor(props: Prop, context: any) {
 		super(props, context);
 
-		this._identifier = props.identifier||("Group_"+this.getRandomBum())
+		this._identifier = props.key||props.identifier||("Group_"+this.getRandomBum())
 
-		this.keys = React.Children.map(this.props.children, (e,index) =>
-			this._identifier+(this.isSelectableComp(e)
-				? ("_Group_"+this.getRandomBum())
-				: "_Item_") +index
-			)
+		this.keys = React.Children.map(this.props.children, (e:any,index) =>{
+			invariant(e.key!=undefined,"%s的子元素缺少属性 key",this._identifier);
+			return e.key;
+			/*this._identifier+(this.isSelectableComp(e)
+					? ("_Group_"+this.getRandomBum())
+					: "_Item_") +index*/
+		})
 
 		this.bs = new BitSwitcher(...this.keys)
 	}
