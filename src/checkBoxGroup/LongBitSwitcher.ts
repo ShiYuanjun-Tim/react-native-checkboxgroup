@@ -1,7 +1,7 @@
 /**
  * Created by syjmac on 2017/8/23.
  *
- *开关器 可以设置任意不大于位数的开关位 并且灵活控制每位的开关状态
+ *开关器 可以设置任意位数的开关位 并且灵活控制每位的开关状态
  *
  * 参数不与许空字符串和 0  之类本身为false的值
  *
@@ -22,39 +22,17 @@
  true
  true
  */
+import {IBitSwitcher} from "./BitSwitcher";
 
-export interface IBitSwitcher<T> {
-	readonly MAX_LEN: number;
-	getKeys(): Iterable<T>;
-	isAllOn(): boolean;
-	isOn(flag?: T): boolean;
-	on(flag: T): IBitSwitcher<T>;
-	off(flag: T): IBitSwitcher<T>
-	copyFrom(from: IBitSwitcher<T>): IBitSwitcher<T>;
-	switcherDiff(target: BitSwitcher<T>|Array<T>): {
-		added: T[];
-		deleted: T[]
-		diff: boolean
-	}
-}
+export default class LongBitSwitcher<T> implements IBitSwitcher<T> {
 
-export default class BitSwitcher<T> implements IBitSwitcher<T> {
+	readonly MAX_LEN: number = Infinity;
 
-	readonly MAX_LEN: number = 30;
-
-	status: number = 0;
-	mask: number;
-	map: Map<T,number>;
+	private map: Map<T,boolean>;
 
 	constructor(...keys: T[]) {
 		if (!keys || keys.length == 0)throw new Error("开关不能空，需要至少一个位");
-		if (keys.length > this.MAX_LEN)throw new Error("BitSwitcher的实现只能最大支持30位的可选开关位，想要更大长度请使用LongBitSwitcher的实现")
-
-		this.status = 0;
-		this.mask   = Math.pow(2, keys.length) - 1;
-		this.map    = new Map(keys.map((e, index): [T, number] => {
-			return [e, 1 << index]
-		}))
+		this.map = new Map(keys.map((e): [T, boolean] => [e, false]))
 	}
 
 	getKeys() {
@@ -62,35 +40,37 @@ export default class BitSwitcher<T> implements IBitSwitcher<T> {
 	}
 
 	isAllOn() {
-		return this.status == this.mask;
+		let values = [...this.map.values()]
+		return values.indexOf(false) == -1;
 	}
 
 	/*有一个开即为开*/
 	isOn(flag?: T) {
 		if (flag) {
-			return (this.status & this._getFlagVal(flag)) != 0
+			return !!(this.map.has(flag) ? this.map.get(flag) : false)
 		}
-		return this.status != 0
+		return [...this.map.values()].indexOf(true) != -1
 	}
 
 	on(flag?: T) {
-		this.status = this.status | this._getFlagVal(flag)
-		this._readable()
+		if (flag && this.map.has(flag)) {
+			this.map.set(flag, true)
+		}
 		return this;
 	}
 
 	off(flag: T) {
-		let flagVMask = this._getFlagVal(flag) ^ this.mask
-		this.status   = flagVMask & this.status
-		this._readable()
+		if (flag && this.map.has(flag)) {
+			this.map.set(flag, false)
+		}
 		return this;
 	}
 
 	/*把自己的key对应的状态位从目标对象上拷贝下来*/
 	copyFrom(from: IBitSwitcher<T>) {
-		let fromKeysArr=[...from.getKeys()]
+		let fromKeysArr = [...from.getKeys()]
 		for (let key of this.getKeys()) {
-			if(fromKeysArr.indexOf(key)!==-1){
+			if (fromKeysArr.indexOf(key) !== -1) {
 				let isOn = from.isOn(key);
 				isOn ? (this.on(key)) : (this.off(key));
 			}
@@ -125,20 +105,6 @@ export default class BitSwitcher<T> implements IBitSwitcher<T> {
 		return {
 			added, deleted, diff: !(added.length == deleted.length && deleted.length == 0)
 		}
-	}
-
-	private _getFlagVal(flag?: T): number {
-		if (flag && this.map.has(flag)) {
-			let v = this.map.get(flag);
-			if (v == null)return 0;
-			return v;
-		}
-		__DEV__ && console.warn(`the key "${flag}" is not a valid one,please pick one from "${[...this.map.keys()].join(",")}"`)
-		return 0
-	}
-
-	_readable() {
-		console.log("_readable", this.status.toString(2))
 	}
 
 }

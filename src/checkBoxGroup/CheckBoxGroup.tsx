@@ -3,7 +3,7 @@
  */
 import * as React from "react";
 import {Text, View,TouchableOpacity,StyleSheet} from "react-native";
-import BitSwitcher from "./BitSwitcher";
+import BitSwitcher from "./LongBitSwitcher";
 import {Selectable, IDENTIFIER,SelectableProps} from "./Selectable";
 import CheckBoxItem from "./CheckBoxItem";
 import ReactElement = React.ReactElement;
