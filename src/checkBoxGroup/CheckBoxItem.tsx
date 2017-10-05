@@ -13,6 +13,7 @@ export interface ItemProps extends SelectableProps {
 	/*内部使用标记 唯一id*/
 	identifier: string;
 	ref: string|Function;
+	key:string;
 }
 
 export default class CheckBoxItem extends React.Component<ItemProps,{isSelected: boolean}> implements Selectable {
@@ -51,6 +52,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 		} else {
 			this.select()
 		}
+		console.log("selectedChanged",this.props.identifier,!current?"ON":"OFF")
 		this.props.selectedChanged && this.props.selectedChanged(this.props.identifier, !current)
 	}
 

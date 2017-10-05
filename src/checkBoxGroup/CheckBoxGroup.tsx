@@ -25,7 +25,7 @@ export interface  Prop  extends  SelectableProps{
 	// children: React.ReactNode;
 	/*内部使用标记*/
 	identifier?: string;
-	key?:string;
+	key:string;
 }
 
 export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boolean}> implements Selectable {
@@ -47,37 +47,66 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	private bs: BitSwitcher<string>;
 	private keys: string[];
 	private _items: Map<string,Selectable> = new Map();
+	private _identifier:string;
 
 	private addItem(key: string, item: Selectable): void {
 		if (!this._items.has(key)) {
 			this._items.set(key, item);
 		}
 	}
-
-	private _identifier:string;
+	private removeItem(key: string): void {
+		if (this._items.has(key)) {
+			this._items.delete(key);
+		}
+	}
 
 	private getRandomBum():number{
 		return (Math.ceil(Math.random() * 10000000))
 	}
 
+	/**获取自组件的key数组*/
+	private getKeysArr(props:Prop){__DEV__
+		return React.Children.map(props.children, (e:any,index) =>{
+			if(__DEV__)invariant(e.key!=undefined,"%s的子元素缺少属性 key",this._identifier);
+			return e.key;
+			/*this._identifier+(this.isSelectableComp(e)
+			 ? ("_Group_"+this.getRandomBum())
+			 : "_Item_") +index*/
+		})
+	}
+
+	private syncChildrenChange(nextProps:Prop){
+		let newKeysArr=this.getKeysArr(nextProps);
+		let result = this.bs.switcherDiff(newKeysArr)
+		if(result.diff){
+			//子元素key被改变了,从新生成开关 对比总状态
+			let newBS:BitSwitcher<string>= new BitSwitcher(...newKeysArr) ;
+			this.bs = newBS.copyFrom(this.bs);
+			let oldIsAllOn = this.state.isSelected,newIsAllOn=this.bs.isAllOn() ;
+			//如果有删除的元素需要把ref从this.items表中移除
+			if(result.deleted.length!=0){
+				for(let key of result.deleted){
+					this.removeItem(key)
+				}
+			}
+			if(newIsAllOn!=oldIsAllOn){
+				this.setState({isSelected:newIsAllOn})
+			}
+		}
+	}
+
 	constructor(props: Prop, context: any) {
 		super(props, context);
 
-		this._identifier = props.key||props.identifier||("Group_"+this.getRandomBum())
+		this._identifier = props.identifier||("Group_"+this.getRandomBum())
 
-		this.keys = React.Children.map(this.props.children, (e:any,index) =>{
-			invariant(e.key!=undefined,"%s的子元素缺少属性 key",this._identifier);
-			return e.key;
-			/*this._identifier+(this.isSelectableComp(e)
-					? ("_Group_"+this.getRandomBum())
-					: "_Item_") +index*/
-		})
+		this.keys = this.getKeysArr(this.props)
 
 		this.bs = new BitSwitcher(...this.keys)
 	}
 
 	componentWillReceiveProps(nextProps:Prop,nextState:Prop){
-		debugger
+		this.syncChildrenChange(nextProps);
 	}
 
 	select(): void {
@@ -103,6 +132,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		} else {
 			this.deselect()
 		}
+		console.log("selectedChanged",this.props.identifier,isSelectedNext?"ON":"OFF")
 		this.props.selectedChanged && this.props.selectedChanged(this.props.identifier || "", isSelectedNext)
 	}
 
@@ -118,11 +148,11 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	private selectedChanged = (childKey: string, isSelected: boolean) => {
-		console.log("selectedChanged",childKey,isSelected?"ON":"OFF")
 		isSelected ? this.bs.on(childKey) : this.bs.off(childKey);
 		let nextGrpState = this.bs.isAllOn();
 		if (nextGrpState != this.state.isSelected) {
 			this.setState({isSelected: nextGrpState})
+			console.log("selectedChanged",this.props.identifier,nextGrpState?"ON":"OFF")
 			this.props.selectedChanged && this.props.selectedChanged(this.props.identifier || "", nextGrpState)
 		}
 	}
@@ -154,11 +184,12 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	render() {
-		console.log("CheckboxGroup render")
+		console.log(`CheckboxGroup ${this._identifier} render`)
 
 		let {style} = this.props;
-		let children = React.Children.map(this.props.children, (reactChild, index) => {
-			let key = this.keys[index];
+		let children = React.Children.map(this.props.children, (reactChild:any, index) => {
+			let key = reactChild.key;
+			invariant(key!=null,"%s的子元素缺少属性 key",this._identifier);
 			if (this.isSelectableComp(reactChild)) {
 				return React.cloneElement((reactChild as React.ReactElement<any>), {
 					...this.enrichChildProps(key)

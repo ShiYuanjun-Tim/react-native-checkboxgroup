@@ -53,6 +53,7 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 					               renderTitle={()=>{
 					               	return <View style={{backgroundColor:"#a0ff1b"}}><Text>Outter Group Title</Text></View>
 					               }}
+					               key="OuterGP"
 					               style={{backgroundColor:"transparent",padding:5}}
 					               ref="checkgp">
 
@@ -60,32 +61,35 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 						                renderTitle={()=>{
 					               	    return <View style={{backgroundColor:"#a0ff1b"}}><Text>Inner Group Title</Text></View>
 						                }}
+						                key="AGp"
 						>
-							<View style={[styles.item]}>
+							<View style={[styles.item]} key="A1">
 								<Text>balabala...</Text>
 								<Image style={styles.img}
 								       source={{uri:uri}}></Image>
 							</View>
 
-							<View style={[styles.item]}>
+							<View style={[styles.item]} key="A2">
 								<Text>balabala. 111..</Text>
 								<Image style={styles.img}
 								       source={{uri:uri}}></Image>
 							</View>
 
-							<View style={[styles.item]}>
+							<View style={[styles.item]} key="A3">
 								<Text>balabala..333.</Text>
 								<Image style={styles.img}
 								       source={{uri:uri}}></Image>
 							</View>
 
-							<Text>Grouo Item 122222</Text>
-							<Text>Grouo Item 3333</Text>
+							<Text key="A">Grouo Item 122222</Text>
+							<Text key="AA">Grouo Item 444444</Text>
+							<Text key="AAA">Grouo Item 3333</Text>
 						</CheckBoxGroup>
 
-						<Text>Item 44444</Text>
-						<Text>Item 55555</Text>
-						<Text>Item 666666</Text>
+						<Text key="B">Item 44444</Text>
+						<Text key="BB">Item 55555</Text>
+						<Text key="BBB">Item 666666</Text>
+
 
 					</CheckBoxGroup>
 
