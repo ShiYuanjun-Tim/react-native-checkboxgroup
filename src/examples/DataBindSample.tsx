@@ -40,27 +40,27 @@ export default class MyAwesomeProject extends React.Component<object, State> {
 
 				<Button title="toogle  checkgp true" onPress={()=>{
 					this.refs.checkgp.toggle(true)
-					console.log("xxx",this.refs.checkgp.getSelectedValue())
 				}}></Button>
 				<Button title="toogle checkgp false" onPress={()=>{
 										this.refs.checkgp.toggle(!true)
-							console.log("xxx",this.refs.checkgp.getSelectedValue())
-
 				}}></Button>
 				<Button title="add Item" onPress={()=>{
 					this.add()
-										console.log("xxx",this.refs.checkgp.getSelectedValue())
 				}}></Button>
 
 				<Button title="delete Item" onPress={()=>{
 						this.del()
-											console.log("xxx",this.refs.checkgp.getSelectedValue())
 				}}></Button>
 
 
 				<CheckBoxGroup style={{borderColor:"gray",borderWidth:1,paddingLeft:10}}
 				               ref="checkgp"
-				               key="SuperGroup">
+				               key="SuperGroup"
+				               onChange={(v)=>{
+				               	  console.log("onChange",v,this.refs.checkgp.getSelectedValue())
+
+				               }}
+				>
 
 					<CheckBoxGroup key="GroupA" style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
 						<Text key="A">Grouo Item 122222</Text>

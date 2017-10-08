@@ -14,8 +14,8 @@ export interface  Prop  extends  SelectableProps{
 	isGroupTitleBarVisiable?:boolean;
 	/*渲染标题栏*/
 	renderTitle?:()=>React.ReactElement<any>;
-	//每次用户改变选中想的行为都会触发这个callback
-	// onChange?:()=>void;
+	//每次用户改变选中的行为都会触发这个callback,
+	onChange?:(k:SelectedStatus)=>void;
 	/*自定义 选中状态 用方法*/
 	// renderCheckBox?:(isSelected:boolean)=>React.ReactElement<any>;
 	// rowTemplate?:(checkbox:React.ReactElement<any>,item:React.ReactElement<any>)=>React.ReactElement<any>;
@@ -40,7 +40,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		},
 		renderTitle:()=>{return null},
 		isGroupTitleBarVisiable:true,
-		onChanged:()=>{}
+		onChange:(v:SelectedStatus)=>{}
 	}
 
 	state = {
@@ -125,31 +125,36 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		};
 	}
 
-	select(): void {
-		this.setState({isSelected: true})
+	select(cb?:Function): void {
 		this._items.forEach((v, k) => {
 			this.bs.on(k)
 			v.select();
 		})
+		this.setState({isSelected: true},()=>{
+			cb&&cb()
+		})
 	}
 
-	deselect(): void {
-		this.setState({isSelected: false})
+	deselect(cb?:Function): void {
 		this._items.forEach((v, k) => {
 			this.bs.off(k)
 			v.deselect();
+		})
+		this.setState({isSelected: false},()=>{
+			cb&&cb()
 		})
 	}
 
 	toggle=(trueOrFalse?:boolean)=> {
 		let isSelectedNext = trueOrFalse==undefined? !this.state.isSelected :trueOrFalse;
 		if (isSelectedNext) {
-			this.select()
+			this.select(this.onChange)
 		} else {
-			this.deselect()
+			this.deselect(this.onChange)
 		}
-		console.log("selectedChanged",this.props.identifier,isSelectedNext?"ON":"OFF")
-		this.props.selectedChanged && this.props.selectedChanged(this.props.identifier || "", isSelectedNext)
+		console.log("selectedChanged",this._identifier,isSelectedNext?"ON":"OFF")
+		this.props.selectedChanged && this.props.selectedChanged(this._identifier , isSelectedNext)
+		// this.onChange(this._identifier,isSelectedNext)
 	}
 
 	private isSelectableComp(reactChild: React.ReactChild) {
@@ -171,7 +176,10 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			console.log("selectedChanged",this._identifier,nextGrpState?"ON":"OFF")
 			this.props.selectedChanged && this.props.selectedChanged(this._identifier || "", nextGrpState)
 		}
-		// this.props.onChange&&this.props.onChange()
+	}
+
+	private onChange = (v?:SelectedStatus) => {
+			this.props.onChange && this.props.onChange(v?v:this.getSelectedValue())
 	}
 
 	private enrichChildProps = (ownKey: string) => {
@@ -183,8 +191,9 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 				item && this.addItem(ownKey, item)
 			},
 			selectedChanged: this.selectedChanged,
+			onChange: this.onChange,
 			renderCheckBox:this.props.renderCheckBox,
-			rowTemplate:this.props.rowTemplate
+			rowTemplate:this.props.rowTemplate,
 		}
 	};
 

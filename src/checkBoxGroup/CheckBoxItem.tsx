@@ -3,13 +3,14 @@
  */
 import * as React from "react";
 import {Text, View, TouchableOpacity} from "react-native";
-import {Selectable, IDENTIFIER,SelectableProps} from "./Selectable";
+import {Selectable, IDENTIFIER,SelectableProps,SelectedStatus} from "./Selectable";
 import ReactElement = React.ReactElement;
 
 
 export interface ItemProps extends SelectableProps {
 	/*用于组件内部状态改变时候进行往上级传递使用*/
 	selectedChanged: (key: string, isSelected: boolean) => void;
+	onChange: (v:SelectedStatus) => void;
 	/*内部使用标记 唯一id*/
 	identifier: string;
 	ref: string|Function;
@@ -45,23 +46,28 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 		};
 	}
 
-	select(): void {
-		this.setState({isSelected: true})
+	select(cb?:Function): void {
+		this.setState({isSelected: true},()=>{cb&&cb()})
 	}
 
-	deselect(): void {
-		this.setState({isSelected: false})
+	deselect(cb?:Function): void {
+		this.setState({isSelected: false},()=>{cb&&cb()})
 	}
 
 	toggle = () => {
 		let current = this.state.isSelected
+		let cb=()=>{
+			this.props.onChange && this.props.onChange({key:this.props.identifier,value: this.state.isSelected})
+		}
 		if (current) {
-			this.deselect()
+			this.deselect(cb)
 		} else {
-			this.select()
+			this.select(cb)
 		}
 		console.log("selectedChanged",this.props.identifier,!current?"ON":"OFF")
 		this.props.selectedChanged && this.props.selectedChanged(this.props.identifier, !current)
+		// this.props.onChange && this.props.onChange(this.props.identifier, !current)
+
 	}
 
 	render() {
