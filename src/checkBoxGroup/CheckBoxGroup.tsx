@@ -4,7 +4,7 @@
 import * as React from "react";
 import {Text, View,TouchableOpacity,StyleSheet} from "react-native";
 import BitSwitcher from "./LongBitSwitcher";
-import {Selectable, IDENTIFIER,SelectableProps} from "./Selectable";
+import {Selectable, IDENTIFIER,SelectableProps,SelectedStatus} from "./Selectable";
 import CheckBoxItem from "./CheckBoxItem";
 import ReactElement = React.ReactElement;
 import invariant from "./invariant"
@@ -14,13 +14,15 @@ export interface  Prop  extends  SelectableProps{
 	isGroupTitleBarVisiable?:boolean;
 	/*渲染标题栏*/
 	renderTitle?:()=>React.ReactElement<any>;
+	//每次用户改变选中想的行为都会触发这个callback
+	// onChange?:()=>void;
 	/*自定义 选中状态 用方法*/
 	// renderCheckBox?:(isSelected:boolean)=>React.ReactElement<any>;
 	// rowTemplate?:(checkbox:React.ReactElement<any>,item:React.ReactElement<any>)=>React.ReactElement<any>;
 
 	style?:object;
 	/*  ********以下为内部使用 *********/
-	/*用于组件内部状态改变时候进行往上级传递使用*/
+	/*用于组件内部状态改变时候进行往上级传递使用,对于一个gruop而言只有全部子项目变on或者一个变off导致group状态变化的 时候才会触发这个方法*/
 	selectedChanged?: (key: string, isSelected: boolean) => void;
 	// children: React.ReactNode;
 	/*内部使用标记*/
@@ -37,7 +39,8 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			return <Text>{isSelected? "On" : "Off"}  </Text>
 		},
 		renderTitle:()=>{return null},
-		isGroupTitleBarVisiable:true
+		isGroupTitleBarVisiable:true,
+		onChanged:()=>{}
 	}
 
 	state = {
@@ -109,6 +112,19 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		this.syncChildrenChange(nextProps);
 	}
 
+	getSelectedValue() {
+		let children:Map<string,SelectedStatus> = new Map() ;
+		for( let [key,selectable] of this._items){
+			children.set(key,selectable.getSelectedValue())
+		}
+
+		return {
+			key:this._identifier,
+			value:this.state.isSelected,
+			children
+		};
+	}
+
 	select(): void {
 		this.setState({isSelected: true})
 		this._items.forEach((v, k) => {
@@ -152,9 +168,10 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		let nextGrpState = this.bs.isAllOn();
 		if (nextGrpState != this.state.isSelected) {
 			this.setState({isSelected: nextGrpState})
-			console.log("selectedChanged",this.props.identifier,nextGrpState?"ON":"OFF")
-			this.props.selectedChanged && this.props.selectedChanged(this.props.identifier || "", nextGrpState)
+			console.log("selectedChanged",this._identifier,nextGrpState?"ON":"OFF")
+			this.props.selectedChanged && this.props.selectedChanged(this._identifier || "", nextGrpState)
 		}
+		// this.props.onChange&&this.props.onChange()
 	}
 
 	private enrichChildProps = (ownKey: string) => {

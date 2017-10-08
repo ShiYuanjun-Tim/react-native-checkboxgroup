@@ -17,6 +17,7 @@ export interface ItemProps extends SelectableProps {
 }
 
 export default class CheckBoxItem extends React.Component<ItemProps,{isSelected: boolean}> implements Selectable {
+
 	static IDENTIFIER = IDENTIFIER
 
 	static defaultProps = {
@@ -36,6 +37,13 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 	state = {
 		isSelected: false
 	};
+
+	getSelectedValue() {
+		return {
+			key:this.props.identifier,
+			value:this.state.isSelected
+		};
+	}
 
 	select(): void {
 		this.setState({isSelected: true})
