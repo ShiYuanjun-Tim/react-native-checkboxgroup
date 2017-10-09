@@ -1,7 +1,8 @@
 {
   "name": "react-native-checkboxgroup",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main":"lib/checkBoxGroup/index.js",
+  "types": "lib/checkBoxGroup/index.d.ts",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
