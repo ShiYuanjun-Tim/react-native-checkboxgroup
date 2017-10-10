@@ -27,7 +27,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 		renderCheckBox: (isSelected: boolean) => {
 			return <Text>{isSelected ? "On" : "Off"}  </Text>
 		},
-		rowTemplate:(checkbox:ReactElement<any>,item:ReactElement<any>)=>{
+		rowTemplate:(checkbox:ReactElement<any>,item:ReactElement<any>,key:string)=>{
 			return <View style={{flexDirection:"row"}}>
 				{checkbox}
 				{item}
@@ -71,7 +71,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 	}
 
 	render() {
-		let {renderCheckBox,rowTemplate} = this.props
+		let {renderCheckBox,rowTemplate,identifier} = this.props
 
 		let checkbox = (
 			<TouchableOpacity onPress={this.toggle} style={{justifyContent:"center",alignItems:"center"}}>
@@ -80,7 +80,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 		)
 		console.log("CheckboxItem render")
 		return <View>
-			{rowTemplate&&rowTemplate(checkbox,this.props.children)}
+			{rowTemplate&&rowTemplate(checkbox,this.props.children,identifier)}
 		</View>
 	}
 

@@ -25,13 +25,13 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 		</View>
 	}
 
-	rowTemplate=(checkbox:React.ReactElement<any>,item:React.ReactElement<any>)=>{
+	rowTemplate=(checkbox:React.ReactElement<any>,item:React.ReactElement<any>,key:string)=>{
 			return <View style={{borderWidth:1,borderColor:"red",marginBottom:6}}>
 					<View style={{flexDirection:"row"}}>
 						{checkbox}
 						{item}
 					</View>
-					<View style={{backgroundColor:"yellow"}}><Text>bottom bar </Text></View>
+					<View style={{backgroundColor:"yellow"}}><Text>bottom bar {key}</Text></View>
 				</View>
 
 	}

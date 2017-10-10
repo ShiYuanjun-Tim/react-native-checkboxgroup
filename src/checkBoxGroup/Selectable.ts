@@ -22,7 +22,7 @@ export interface SelectableProps {
 	/**用户自定每个选项的布局，参数是自定义过的复选框和每一行的具体内容
 	 * checkbox 已经实现了选中时间的逻辑不应该在被包在Touchable组件中
 	* */
-	rowTemplate?: (checkbox: ReactElement<any>, item: React.ReactNode) => ReactElement<any>;
+	rowTemplate?: (checkbox: ReactElement<any>, item: React.ReactNode,key:string) => ReactElement<any>;
 
 	/*  ********以下为内部使用 *********/
 	children: React.ReactNode;
