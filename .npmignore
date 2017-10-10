@@ -4,3 +4,5 @@ ios/
 *.js.map
 node_modules/
 .idea/
+lib/examples/
+src/examples/

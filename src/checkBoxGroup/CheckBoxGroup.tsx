@@ -152,7 +152,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		} else {
 			this.deselect(this.onChange)
 		}
-		console.log("selectedChanged",this._identifier,isSelectedNext?"ON":"OFF")
+		//console.log("selectedChanged",this._identifier,isSelectedNext?"ON":"OFF")
 		this.props.selectedChanged && this.props.selectedChanged(this._identifier , isSelectedNext)
 		// this.onChange(this._identifier,isSelectedNext)
 	}
@@ -173,7 +173,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		let nextGrpState = this.bs.isAllOn();
 		if (nextGrpState != this.state.isSelected) {
 			this.setState({isSelected: nextGrpState})
-			console.log("selectedChanged",this._identifier,nextGrpState?"ON":"OFF")
+			//console.log("selectedChanged",this._identifier,nextGrpState?"ON":"OFF")
 			this.props.selectedChanged && this.props.selectedChanged(this._identifier || "", nextGrpState)
 		}
 	}
@@ -183,7 +183,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	private enrichChildProps = (ownKey: string) => {
-		console.log("ownKey", ownKey)
+		//console.log("ownKey", ownKey)
 		return {
 			identifier     : ownKey,
 			key            : ownKey,
@@ -210,7 +210,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	render() {
-		console.log(`CheckboxGroup ${this._identifier} render`)
+		//console.log(`CheckboxGroup ${this._identifier} render`)
 
 		let {style} = this.props;
 		let children = React.Children.map(this.props.children, (reactChild:any, index) => {

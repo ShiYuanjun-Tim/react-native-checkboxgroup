@@ -64,7 +64,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 		} else {
 			this.select(cb)
 		}
-		console.log("selectedChanged",this.props.identifier,!current?"ON":"OFF")
+		//console.log("selectedChanged",this.props.identifier,!current?"ON":"OFF")
 		this.props.selectedChanged && this.props.selectedChanged(this.props.identifier, !current)
 		// this.props.onChange && this.props.onChange(this.props.identifier, !current)
 
@@ -78,7 +78,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 				{renderCheckBox && renderCheckBox(this.state.isSelected)}
 			</TouchableOpacity>
 		)
-		console.log("CheckboxItem render")
+		//console.log("CheckboxItem render")
 		return <View>
 			{rowTemplate&&rowTemplate(checkbox,this.props.children,identifier)}
 		</View>
