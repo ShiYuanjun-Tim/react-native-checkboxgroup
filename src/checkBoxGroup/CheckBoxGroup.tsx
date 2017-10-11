@@ -227,7 +227,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		let { renderCheckBox,isGroupTitleBarVisiable,renderTitle} = this.props;
 		return isGroupTitleBarVisiable
 			?<View style={sts.groupTitleBar}>
-				<TouchableOpacity onPress={()=>{this.toggle()}} style={{}}>
+				<TouchableOpacity onPress={()=>{this.toggle()}} activeOpacity={1} style={{}}>
 					{!this.isRadioMode()&&renderCheckBox&&renderCheckBox(this.state.isSelected)}
 				</TouchableOpacity>
 				{renderTitle&&renderTitle()}

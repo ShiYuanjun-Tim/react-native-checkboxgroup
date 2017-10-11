@@ -74,7 +74,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 		let {renderCheckBox,rowTemplate,identifier} = this.props
 
 		let checkbox = (
-			<TouchableOpacity onPress={this.toggle} style={{justifyContent:"center",alignItems:"center"}}>
+			<TouchableOpacity onPress={this.toggle} activeOpacity={1} style={{justifyContent:"center",alignItems:"center"}}>
 				{renderCheckBox && renderCheckBox(this.state.isSelected)}
 			</TouchableOpacity>
 		)
