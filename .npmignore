@@ -6,3 +6,5 @@ node_modules/
 .idea/
 lib/examples/
 src/examples/
+src/__tests__/
+lib/__tests__/
