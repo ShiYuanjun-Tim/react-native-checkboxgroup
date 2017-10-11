@@ -28,6 +28,7 @@ export interface  Prop  extends  SelectableProps{
 	/*内部使用标记*/
 	identifier?: string;
 	key:string;
+	mode?:"RadioGroupMode"
 }
 
 export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boolean}> implements Selectable {
@@ -51,6 +52,9 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	private keys: string[];
 	private _items: Map<string,Selectable> = new Map();
 	private _identifier:string;
+
+	//单选模式下用来记录选中的项key
+	private onKey:string;
 
 	private addItem(key: string, item: Selectable): void {
 		if (!this._items.has(key)) {
@@ -112,6 +116,10 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		this.syncChildrenChange(nextProps);
 	}
 
+	private isRadioMode():boolean{
+		return this.props.mode==="RadioGroupMode"
+	}
+
 	getSelectedValue() {
 		let children:Map<string,SelectedStatus> = new Map() ;
 		for( let [key,selectable] of this._items){
@@ -146,6 +154,8 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	toggle=(trueOrFalse?:boolean)=> {
+		//单选模式不能在组级调用
+		if(this.isRadioMode())return;
 		let isSelectedNext = trueOrFalse==undefined? !this.state.isSelected :trueOrFalse;
 		if (isSelectedNext) {
 			this.select(this.onChange)
@@ -177,6 +187,22 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			this.props.selectedChanged && this.props.selectedChanged(this._identifier || "", nextGrpState)
 		}
 	}
+	private radioSelectedChanged = (childKey: string, isSelected: boolean) => {
+		if(isSelected ){
+			//单选模式正选 需要看是否已有选中项，有就要关掉
+			let lastON = this.onKey
+			let onItem = this._items.get(lastON);
+			if(onItem){
+				onItem.deselect()
+			}
+			this.bs.on(childKey)
+			this.onKey = childKey;
+		} else{
+			this.bs.off(childKey)
+			this.onKey = "";
+		}
+
+	}
 
 	private onChange = (v?:SelectedStatus) => {
 			this.props.onChange && this.props.onChange(v?v:this.getSelectedValue())
@@ -190,7 +216,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			ref            : (item: Selectable) => {
 				item && this.addItem(ownKey, item)
 			},
-			selectedChanged: this.selectedChanged,
+			selectedChanged: this.isRadioMode()?this.radioSelectedChanged:this.selectedChanged,
 			onChange: this.onChange,
 			renderCheckBox:this.props.renderCheckBox,
 			rowTemplate:this.props.rowTemplate,
@@ -202,7 +228,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		return isGroupTitleBarVisiable
 			?<View style={sts.groupTitleBar}>
 				<TouchableOpacity onPress={()=>{this.toggle()}} style={{}}>
-					{renderCheckBox&&renderCheckBox(this.state.isSelected)}
+					{!this.isRadioMode()&&renderCheckBox&&renderCheckBox(this.state.isSelected)}
 				</TouchableOpacity>
 				{renderTitle&&renderTitle()}
 			</View>
@@ -217,6 +243,9 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			let key = reactChild.key;
 			invariant(key!=null,"%s的子元素缺少属性 key",this._identifier);
 			if (this.isSelectableComp(reactChild)) {
+				if(__DEV__){
+					invariant(!this.isRadioMode(),"单选模式不允许有嵌套的Group作为子元素使用")
+				}
 				return React.cloneElement((reactChild as React.ReactElement<any>), {
 					...this.enrichChildProps(key)
 				})
