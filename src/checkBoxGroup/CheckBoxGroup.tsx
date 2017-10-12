@@ -192,11 +192,13 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			//单选模式正选 需要看是否已有选中项，有就要关掉
 			let lastON = this.onKey
 			let onItem = this._items.get(lastON);
-			if(onItem){
+			//childKey!=lastON防止同一子组中的其他项被选中时候整个组被上级反选
+			if(onItem&&(childKey!=lastON)){
 				onItem.deselect()
 			}
 			this.bs.on(childKey)
 			this.onKey = childKey;
+			this.props.selectedChanged && this.props.selectedChanged(this._identifier || "", true)
 		} else{
 			this.bs.off(childKey)
 			this.onKey = "";
@@ -220,6 +222,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			onChange: this.onChange,
 			renderCheckBox:this.props.renderCheckBox,
 			rowTemplate:this.props.rowTemplate,
+			mode:this.props.mode
 		}
 	};
 
@@ -243,9 +246,6 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			let key = reactChild.key;
 			invariant(key!=null,"%s的子元素缺少属性 key",this._identifier);
 			if (this.isSelectableComp(reactChild)) {
-				if(__DEV__){
-					invariant(!this.isRadioMode(),"单选模式不允许有嵌套的Group作为子元素使用")
-				}
 				return React.cloneElement((reactChild as React.ReactElement<any>), {
 					...this.enrichChildProps(key)
 				})

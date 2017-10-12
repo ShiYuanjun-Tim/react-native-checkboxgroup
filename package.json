@@ -1,6 +1,6 @@
 {
   "name": "react-native-checkboxgroup",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main":"lib/checkBoxGroup/index.js",
   "types": "lib/checkBoxGroup/index.d.ts",
   "scripts": {

@@ -39,10 +39,12 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 				               	  console.log("onChange",v,this.refs.checkgp.getSelectedValue())
 
 				               }}>
+					<CheckBoxGroup key="GroupA" style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
 
 						<Text key="A">Grouo Item 122222</Text>
 						<Text key="AA">Grouo Item 444444</Text>
 						<Text key="AAA">Grouo Item 3333</Text>
+					</CheckBoxGroup>
 
 					<Text key="B">Item 44444</Text>
 					<Text key="BB">Item 55555</Text>

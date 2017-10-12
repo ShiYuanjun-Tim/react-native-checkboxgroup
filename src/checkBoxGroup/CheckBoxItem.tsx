@@ -15,6 +15,7 @@ export interface ItemProps extends SelectableProps {
 	identifier: string;
 	ref: string|Function;
 	key:string;
+	mode?:string;
 }
 
 export default class CheckBoxItem extends React.Component<ItemProps,{isSelected: boolean}> implements Selectable {
