@@ -13,7 +13,7 @@ import {
 	Text,ScrollView,
 	View,Button,Image
 } from 'react-native';
-import CheckBoxGroup from "../checkBoxGroup"
+import CheckBoxGroup,{SelectedStatus} from "../checkBoxGroup"
 
 export default class MyAwesomeProject extends React.Component<object, {a:number}> {
 
@@ -33,17 +33,22 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 
 
 				<CheckBoxGroup style={{backgroundColor:"gray"}}
-				               ref="checkgp" key="ddd">
+				               ref="checkgp" key="ddd"
+				               identifier="wholeGroup"
+				               onChange={(v:SelectedStatus)=>{
+													console.log(v)
+												}}
+				>
 
 					<CheckBoxGroup key="GroupA" style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
-						<Text key="A">Grouo Item 122222</Text>
-						<Text key="AA">Grouo Item 444444</Text>
-						<Text key="AAA">Grouo Item 3333</Text>
+						<Text key="A">Grouo Item A</Text>
+						<Text key="AA">Grouo Item AA</Text>
+						<Text key="AAA">Grouo Item AAA</Text>
 					</CheckBoxGroup>
 
-					<Text key="B">Item 44444</Text>
-					<Text key="BB">Item 55555</Text>
-					<Text key="BBB">Item 666666</Text>
+					<Text key="B">Item B</Text>
+					<Text key="BB">Item BB</Text>
+					<Text key="BBB">Item BBB</Text>
 
 				</CheckBoxGroup>
 

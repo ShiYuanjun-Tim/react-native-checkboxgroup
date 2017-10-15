@@ -13,7 +13,7 @@ import {
 	Text,ScrollView,
 	View,Button,Image
 } from 'react-native';
-import CheckBoxGroup,{RADIO_MODE} from "../checkBoxGroup"
+import CheckBoxGroup,{SelectedStatus} from "../checkBoxGroup"
 
 export default class MyAwesomeProject extends React.Component<object, {a:number}> {
 
@@ -33,19 +33,13 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 
 
 				<CheckBoxGroup style={{backgroundColor:"gray"}}
-				               mode={RADIO_MODE}
-				               renderTitle={()=>{return <Text>Title</Text>}}
-				               ref="checkgp" key="ddd"
-				               onChange={(v)=>{
-				               	  console.log("onChange",v,this.refs.checkgp.getSelectedValue())
-
-				               }}>
-					<CheckBoxGroup key="GroupA" style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
-
-						<Text key="A">Grouo Item A</Text>
-						<Text key="AA">Grouo Item AA</Text>
-						<Text key="AAA">Grouo Item AAA</Text>
-					</CheckBoxGroup>
+				               ref="checkgp"
+				               key="groupBKey"
+				               identifier="groupB"
+												onChange={(v:SelectedStatus)=>{
+													console.log(v)
+												}}
+				>
 
 					<Text key="B">Item B</Text>
 					<Text key="BB">Item BB</Text>

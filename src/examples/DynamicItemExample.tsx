@@ -63,19 +63,21 @@ export default class MyAwesomeProject extends React.Component<object, State> {
 				>
 
 					<CheckBoxGroup key="GroupA" style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
-						<Text key="A">Grouo Item 122222</Text>
-						<Text key="AA">Grouo Item 444444</Text>
-						<Text key="AAA">Grouo Item 3333</Text>
+						<Text key="A">Grouo Item A</Text>
+						<Text key="AA">Grouo Item AA</Text>
+						<Text key="AAA">Grouo Item AAA</Text>
+
 						<CheckBoxGroup key="GruopINGroupA" style={{borderColor:"green",borderWidth:1,paddingLeft:10}}>
-							<Text key="INGroupA">Grouo Item 122222</Text>
-							<Text key="INGroupAA">Grouo Item 444444</Text>
-							<Text key="INGroupAAA">Grouo Item 3333</Text>
+							<Text key="INGroupA">Grouo Item INGroupA</Text>
+							<Text key="INGroupAA">Grouo Item INGroupAA</Text>
+							<Text key="INGroupAAA">Grouo Item INGroupAAA</Text>
 						</CheckBoxGroup>
+
 					</CheckBoxGroup>
 
-					<Text key="B">Item 44444</Text>
-					<Text key="BB">Item 55555</Text>
-					<Text key="BBB">Item 666666</Text>
+					<Text key="B">Item B</Text>
+					<Text key="BB">Item BB</Text>
+					<Text key="BBB">Item BBB</Text>
 
 					{this.state.data.map((e, i) => {
 						return <Text key={"C_"+i}>{e}</Text>

@@ -8,7 +8,7 @@
  */
 import * as React from "react";
 import {StyleSheet, Text, View, Button, Image} from "react-native";
-import CheckBoxGroup from "../checkBoxGroup";
+import CheckBoxGroup,{SelectedStatus} from "../checkBoxGroup";
 
 const uri='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='
 
@@ -55,40 +55,44 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 					               }}
 					               key="OuterGP"
 					               style={{backgroundColor:"transparent",padding:5}}
-					               ref="checkgp">
+					               ref="checkgp" identifier="OuterGroup"
+					               onChange={(v:SelectedStatus)=>{
+													console.log(v)
+												}}
+					>
 
 						<CheckBoxGroup  style={{borderColor:"blue",borderWidth:1,marginBottom:20,padding:5}}
 						                renderTitle={()=>{
 					               	    return <View style={{backgroundColor:"#a0ff1b"}}><Text>Inner Group Title</Text></View>
 						                }}
-						                key="AGp"
+						                key="AGroup"
 						>
 							<View style={[styles.item]} key="A1">
-								<Text>balabala...</Text>
+								<Text>A1 balabala...</Text>
 								<Image style={styles.img}
 								       source={{uri:uri}}></Image>
 							</View>
 
 							<View style={[styles.item]} key="A2">
-								<Text>balabala. 111..</Text>
+								<Text>A2 balabala. 111..</Text>
 								<Image style={styles.img}
 								       source={{uri:uri}}></Image>
 							</View>
 
 							<View style={[styles.item]} key="A3">
-								<Text>balabala..333.</Text>
+								<Text>A3 balabala..333.</Text>
 								<Image style={styles.img}
 								       source={{uri:uri}}></Image>
 							</View>
 
-							<Text key="A">Grouo Item 122222</Text>
-							<Text key="AA">Grouo Item 444444</Text>
-							<Text key="AAA">Grouo Item 3333</Text>
+							<Text key="A">Grouo Item A</Text>
+							<Text key="AA">Grouo Item AA</Text>
+							<Text key="AAA">Grouo Item AAA</Text>
 						</CheckBoxGroup>
 
-						<Text key="B">Item 44444</Text>
-						<Text key="BB">Item 55555</Text>
-						<Text key="BBB">Item 666666</Text>
+						<Text key="B">Item B</Text>
+						<Text key="BB">Item BB</Text>
+						<Text key="BBB">Item BBB</Text>
 
 
 					</CheckBoxGroup>
