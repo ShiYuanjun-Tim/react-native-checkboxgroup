@@ -55,9 +55,16 @@ API
 ---
 |使用列子|事例文件说明|展示|
 |---|---|---|
-|简单例子| [SimpleExample](src/example/SimpleExample.tsx)|![简单例子](img/SimpleExample.gif)
-|嵌套使用 |[SimpleNestExample](SimpleNestExample.tsx)|![简单例子](img/SimpleNestExample.gif)
-|自定义样式| [CustomizeExample](src/example/CustomizeExample.tsx)|![简单例子](img/CustomizeExample.gif)
-|动态添加／删除 项目|[DynamicItemExample](src/example/DynamicItemExample.tsx)|![简单例子](img/DynamicItemExample.gif)
-|使用简单单选模式|[RadioGroupMode](src/example/RadioGroupMode.tsx)|![简单例子](img/RadioGroupMode.gif)
+|简单例子| [SimpleExample][a]|![简单例子](img/SimpleExample.gif)
+|嵌套使用 |[SimpleNestExample][b]|![简单例子](img/SimpleNestExample.gif)
+|自定义样式| [CustomizeExample][c]|![简单例子](img/CustomizeExample.gif)
+|动态添加／删除 项目|[DynamicItemExample][d]|![简单例子](img/DynamicItemExample.gif)
+|使用简单单选模式|[RadioGroupMode][e]|![简单例子](img/RadioGroupMode.gif)
 
+
+
+[a]:https://github.com/ShiYuanjun-Tim/react-native-checkboxGroup/blob/master/src/examples/SimpleExample.tsx
+[b]:https://github.com/ShiYuanjun-Tim/react-native-checkboxGroup/blob/master/src/examples/SimpleNestExample.tsx
+[c]:https://github.com/ShiYuanjun-Tim/react-native-checkboxGroup/blob/master/src/examples/CustomizeExample.tsx
+[d]:https://github.com/ShiYuanjun-Tim/react-native-checkboxGroup/blob/master/src/examples/DynamicItemExample.tsx
+[e]:https://github.com/ShiYuanjun-Tim/react-native-checkboxGroup/blob/master/src/examples/RadioGroupMode.tsx
