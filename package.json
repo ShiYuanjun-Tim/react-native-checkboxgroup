@@ -1,6 +1,6 @@
 {
   "name": "react-native-checkboxgroup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main":"lib/checkBoxGroup/index.js",
   "types": "lib/checkBoxGroup/index.d.ts",
   "scripts": {
@@ -9,12 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ShiYuanjun-Tim/react-native-checkboxGroup.git"
+    "url": "https://github.com/ShiYuanjun-Tim/react-native-checkboxgroup"
   },
   "keywords": [
     "react-native",
     "checkbox",
-    "checkboxGroup"
+    "checkboxgroup"
   ],
   "author": "ShiyuanJun-Tim",
   "license": "MIT",
