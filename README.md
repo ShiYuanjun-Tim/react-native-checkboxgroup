@@ -12,6 +12,8 @@ API
 基本用法结构类似于：
 
 ```
+import CheckBoxGroup from "react-native-checkboxgroup"
+
 <CheckBoxGroup>
 	<Text key="B">一个简单文字选项</Text>
 	<View key="CC">
