@@ -31,7 +31,7 @@ export default class LongBitSwitcher<T> implements IBitSwitcher<T> {
 	private map: Map<T,boolean>;
 
 	constructor(...keys: T[]) {
-		if (!keys || keys.length == 0)throw new Error("开关不能空，需要至少一个位");
+		// if (!keys || keys.length == 0){throw new Error("开关不能空，需要至少一个位");}
 		this.map = new Map(keys.map((e): [T, boolean] => [e, false]))
 	}
 

@@ -215,7 +215,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		return {
 			identifier     : ownKey,
 			key            : ownKey,
-			ref            : (item: Selectable) => {
+			ref            : (item:any) => {
 				item && this.addItem(ownKey, item)
 			},
 			selectedChanged: this.isRadioMode()?this.radioSelectedChanged:this.selectedChanged,

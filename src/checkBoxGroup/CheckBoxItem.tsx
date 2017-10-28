@@ -13,7 +13,7 @@ export interface ItemProps extends SelectableProps {
 	onChange: (v:SelectedStatus) => void;
 	/*内部使用标记 唯一id*/
 	identifier: string;
-	ref: string|Function;
+	ref: (item:Selectable)=>void;
 	key:string;
 	mode?:string;
 }
