@@ -123,7 +123,15 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	getSelectedValue() {
 		let children:Map<string,SelectedStatus> = new Map() ;
 		for( let [key,selectable] of this._items){
-			children.set(key,selectable.getSelectedValue())
+			let val=selectable.getSelectedValue()
+			//过滤没选中的项 ／／最底层item和group级别的item要区别对待
+			//一般item 只要判断选中值为正
+			if(!val.children){
+				val.value&&children.set(key,val)
+			}else{
+				//组级别item 要判断children有值
+				(val.children.size!=0)&&children.set(key,val)
+			}
 		}
 
 		return {
