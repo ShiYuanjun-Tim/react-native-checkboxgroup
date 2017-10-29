@@ -1,6 +1,6 @@
 {
   "name": "react-native-checkboxgroup",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main":"lib/checkBoxGroup/index.js",
   "types": "lib/checkBoxGroup/index.d.ts",
   "scripts": {
@@ -14,7 +14,8 @@
   "keywords": [
     "react-native",
     "checkbox",
-    "checkboxgroup"
+    "checkboxgroup",
+    "购物车"
   ],
   "author": "ShiyuanJun-Tim",
   "license": "MIT",
