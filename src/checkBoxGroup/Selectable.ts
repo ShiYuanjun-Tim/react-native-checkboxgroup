@@ -13,7 +13,7 @@ export  interface  Selectable {
 	select(cd?:Function): void;
 	deselect(cd?:Function): void;
 	toggle(trueOrFalse?:boolean): void;
-	getSelectedValue():SelectedStatus
+	getSelectedValue(isUnselectedReturned?:boolean):SelectedStatus
 }
 
 export interface SelectableProps {

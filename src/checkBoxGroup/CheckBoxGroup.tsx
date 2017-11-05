@@ -120,18 +120,24 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		return this.props.mode==="RadioGroupMode"
 	}
 
-	getSelectedValue() {
+	getSelectedValue(isFilterFalse:boolean=true) {
 		let children:Map<string,SelectedStatus> = new Map() ;
+
 		for( let [key,selectable] of this._items){
-			let val=selectable.getSelectedValue()
-			//过滤没选中的项 ／／最底层item和group级别的item要区别对待
-			//一般item 只要判断选中值为正
-			if(!val.children){
-				val.value&&children.set(key,val)
+			if(isFilterFalse){
+				let val=selectable.getSelectedValue()
+				//过滤没选中的项 ／／最底层item和group级别的item要区别对待
+				//一般item 只要判断选中值为正
+				if(!val.children){
+					val.value&&children.set(key,val)
+				}else{
+					//组级别item 要判断children有值
+					(val.children.size!=0)&&children.set(key,val)
+				}
 			}else{
-				//组级别item 要判断children有值
-				(val.children.size!=0)&&children.set(key,val)
+				children.set(key,selectable.getSelectedValue(false))
 			}
+
 		}
 
 		return {
@@ -215,7 +221,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	private onChange = (v?:SelectedStatus) => {
-			this.props.onChange && this.props.onChange(v?v:this.getSelectedValue())
+			this.props.onChange && this.props.onChange(v?v:this.getSelectedValue(false))
 	}
 
 	private enrichChildProps = (ownKey: string) => {

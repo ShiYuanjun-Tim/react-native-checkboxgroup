@@ -6,7 +6,5 @@ node_modules/
 .idea/
 lib/examples/
 lib/__tests__/
-src/examples/
-src/__tests__/
-src/**.js
+src/
 img/
