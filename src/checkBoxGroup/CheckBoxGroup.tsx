@@ -29,6 +29,7 @@ export interface  Prop  extends  SelectableProps{
 	identifier?: string;
 	key:string;
 	mode?:"RadioGroupMode"
+	__Selectable_IDENTIFIER__?:any
 }
 
 export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boolean}> implements Selectable {
@@ -41,7 +42,8 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		},
 		renderTitle:()=>{return null},
 		isGroupTitleBarVisiable:true,
-		onChange:(v:SelectedStatus)=>{}
+		onChange:(v:SelectedStatus)=>{},
+		__Selectable_IDENTIFIER__:IDENTIFIER
 	}
 
 	state = {
@@ -181,15 +183,11 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		// this.onChange(this._identifier,isSelectedNext)
 	}
 
-	private isSelectableComp(reactChild: React.ReactChild) {
-		if (reactChild && (reactChild as React.ReactElement<Prop>).type) {
-			let convert = reactChild as React.ReactElement<Prop>;
-			let isChildSelectable = (typeof convert.type == "function")
-				&& convert.type.name == "CheckBoxGroup"
-				&& (convert.type as any).IDENTIFIER == IDENTIFIER
-			return isChildSelectable
-		}
-		return false
+	/*
+	这里使用props上的特性值__Selectable_IDENTIFIER__ 来判定这个是不是一个Selectable的组件
+	* */
+	private isSelectableComp(reactChild: React.ReactElement<any>) {
+		return reactChild.props.__Selectable_IDENTIFIER__===IDENTIFIER
 	}
 
 	private selectedChanged = (childKey: string, isSelected: boolean) => {

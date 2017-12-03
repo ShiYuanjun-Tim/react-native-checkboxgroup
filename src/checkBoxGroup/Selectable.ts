@@ -8,6 +8,12 @@ export const IDENTIFIER = Symbol("Selectable")
 
 export type SelectedStatus ={key:string;value:boolean;children?:Map<string,SelectedStatus>}
 
+/**
+ * !IMPORTANT
+ * 实现这个接口的组件最好 在props中 加入一个值为IDENTIFIER的__Selectable_IDENTIFIER__属性 ，
+ * 用来给checkboxGroup 判定是否是item的容器组件
+*
+* */
 export  interface  Selectable {
 	/*select 和 deselect 都是内部组件间调用的 toggle 才是唯一暴露给外部使用的*/
 	select(cd?:Function): void;
