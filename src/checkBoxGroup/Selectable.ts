@@ -4,7 +4,7 @@
 import * as React from "react";
 import ReactElement = React.ReactElement;
 
-export const IDENTIFIER = Symbol("Selectable")
+export const IDENTIFIER = 'Symbol("Selectable")'
 
 export type SelectedStatus ={key:string;value:boolean;children?:Map<string,SelectedStatus>}
 
