@@ -5,7 +5,8 @@
   "types": "lib/checkBoxGroup/index.d.ts",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "pub":"npm publish --registry http://registry.npmjs.org ."
   },
   "repository": {
     "type": "git",
