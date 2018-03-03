@@ -169,18 +169,26 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 		})
 	}
 
+	/**
+	 * 单选模式不能在组级调用全选，只能用于反选，但是必须明确的传入trueOrFalse =false
+	 * @param trueOrFalse
+	 */
 	toggle=(trueOrFalse?:boolean)=> {
-		//单选模式不能在组级调用全选，可以反选
-		if(this.isRadioMode()&&trueOrFalse)return;
-		let isSelectedNext = trueOrFalse==undefined? !this.state.isSelected :trueOrFalse;
-		if (isSelectedNext) {
-			this.select(this.onChange)
-		} else {
-			this.deselect(this.onChange)
+		let isRadioMode=this.isRadioMode();
+		//单选模式不能在组级调用全选，只能用于反选，但是必须明确的传入trueOrFalse =false
+		if(!isRadioMode || isRadioMode&&trueOrFalse!=undefined&&!trueOrFalse ){
+
+			let isSelectedNext = trueOrFalse==undefined? !this.state.isSelected :trueOrFalse;
+			if (isSelectedNext) {
+				this.select(this.onChange)
+			} else {
+				this.deselect(this.onChange)
+			}
+			//console.log("selectedChanged",this._identifier,isSelectedNext?"ON":"OFF")
+			this.props.selectedChanged && this.props.selectedChanged(this._identifier , isSelectedNext)
+			// this.onChange(this._identifier,isSelectedNext)
 		}
-		//console.log("selectedChanged",this._identifier,isSelectedNext?"ON":"OFF")
-		this.props.selectedChanged && this.props.selectedChanged(this._identifier , isSelectedNext)
-		// this.onChange(this._identifier,isSelectedNext)
+
 	}
 
 	/*

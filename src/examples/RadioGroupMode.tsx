@@ -30,6 +30,12 @@ export default class MyAwesomeProject extends React.Component<object, {a:number}
 				<Button title="toggle whole checkboxgroup2" onPress={()=>{
 					this.refs.checkgp.toggle()
 				}}></Button>
+				<Button title="toggle true whole checkboxgroup2" onPress={()=>{
+					this.refs.checkgp.toggle(true)
+				}}></Button>
+				<Button title="toggle false whole checkboxgroup2" onPress={()=>{
+					this.refs.checkgp.toggle(!true)
+				}}></Button>
 
 
 				<CheckBoxGroup style={{backgroundColor:"gray"}}
