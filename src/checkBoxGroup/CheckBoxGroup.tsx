@@ -170,8 +170,8 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	toggle=(trueOrFalse?:boolean)=> {
-		//单选模式不能在组级调用
-		if(this.isRadioMode())return;
+		//单选模式不能在组级调用全选，可以反选
+		if(this.isRadioMode()&&trueOrFalse)return;
 		let isSelectedNext = trueOrFalse==undefined? !this.state.isSelected :trueOrFalse;
 		if (isSelectedNext) {
 			this.select(this.onChange)
