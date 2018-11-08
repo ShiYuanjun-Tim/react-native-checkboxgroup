@@ -42,6 +42,8 @@ The indicator is highly customizable, also the layout of the item is customizabl
 | ⬛️ |  this is more complex checkbox item	|
 | ⬛️ |  also any custom UI can be a checkbox item	|
 |________________________________________________
+| here is the group footer  |----------> pure UI element no check box available, for tips purpose
+|___________________________________________
 
 ```
 ### CheckBoxGroup
