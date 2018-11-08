@@ -20,12 +20,16 @@ export default class MyAwesomeProject extends React.Component<object, State> {
 
 	state: State = {
 		data: [
-			<CheckBoxGroup key="GroupA" style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
+			<CheckBoxGroup key="GroupA"
+			               renderFooter={()=><Text>GroupA Footer</Text>}
+			               style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
 				<Text key="A">Grouo Item A</Text>
 				<Text key="AA">Grouo Item AA</Text>
 				<Text key="AAA">Grouo Item AAA</Text>
 
-				<CheckBoxGroup key="GruopINGroupA" style={{borderColor:"green",borderWidth:1,paddingLeft:10}}>
+				<CheckBoxGroup key="GruopINGroupA"
+				               renderFooter={()=><Text>GruopINGroupA Footer</Text>}
+				               style={{borderColor:"green",borderWidth:1,paddingLeft:10}}>
 					<Text key="INGroupA">Grouo Item INGroupA</Text>
 					<Text key="INGroupAA">Grouo Item INGroupAA</Text>
 					<Text key="INGroupAAA">Grouo Item INGroupAAA</Text>
@@ -33,7 +37,8 @@ export default class MyAwesomeProject extends React.Component<object, State> {
 
 			</CheckBoxGroup>,
 
-			<CheckBoxGroup key="GruopCCC" style={{borderColor:"green",borderWidth:1,paddingLeft:10}}>
+			<CheckBoxGroup key="GruopCCC"
+			               style={{borderColor:"green",borderWidth:1,paddingLeft:10}}>
 				<Text key="INGroupC">Grouo Item INGroupC</Text>
 				<Text key="INGroupCC">Grouo Item INGroupCC</Text>
 				<Text key="INGroupCCC">Grouo Item INGroupCCC</Text>
@@ -79,6 +84,7 @@ export default class MyAwesomeProject extends React.Component<object, State> {
 				<CheckBoxGroup style={{borderColor:"gray",borderWidth:1,paddingLeft:10}}
 				               ref="checkgp"
 				               key="SuperGroup"
+				               renderFooter={()=><Text>outter Group Footer</Text>}
 				               onChange={(v)=>{
 				               	  console.log("onChange",v,this.refs.checkgp.getSelectedValue())
 

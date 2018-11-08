@@ -14,6 +14,7 @@ export interface  Prop  extends  SelectableProps{
 	isGroupTitleBarVisiable?:boolean;
 	/*渲染标题栏*/
 	renderTitle?:()=>React.ReactElement<any>;
+	renderFooter?:()=>React.ReactElement<any>;
 	//每次用户改变选中的行为都会触发这个callback,
 	onChange?:(k:SelectedStatus)=>void;
 	/*自定义 选中状态 用方法*/
@@ -41,6 +42,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			return <Text>{isSelected? "On" : "Off"}  </Text>
 		},
 		renderTitle:()=>{return null},
+		renderFooter:()=>{return null},
 		isGroupTitleBarVisiable:true,
 		onChange:(v:SelectedStatus)=>{},
 		__Selectable_IDENTIFIER__:IDENTIFIER
@@ -258,6 +260,10 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			:null;
 	}
 
+	private groupFooter(){
+		return this.props.renderFooter && this.props.renderFooter();
+	}
+
 	render() {
 		//console.log(`CheckboxGroup ${this._identifier} render`)
 
@@ -283,6 +289,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			<View style={[]}>
 				{ children }
 			</View>
+			{this.groupFooter()}
 		</View>
 	}
 
