@@ -10,32 +10,40 @@ import * as React from "react";
 import {StyleSheet, Text, ScrollView, Button} from "react-native";
 import CheckBoxGroup from "../checkBoxGroup";
 
-export type State={data: Array<any>, key: number}
+export type State={ key: number, disableArr:string[]}
 
 export default class MyAwesomeProject extends React.Component<object, State> {
+
 
 	refs: {
 		[k: string]: any
 	};
 
 	state: State = {
-		data: [
-			<CheckBoxGroup key="GroupA"
-			               renderFooter={()=><Text>GroupA Footer</Text>}
-			               style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
-				<Text key="A">Grouo Item A</Text>
-				<Text key="AA">Grouo Item AA</Text>
-				<Text key="AAA">Grouo Item AAA</Text>
+		disableArr: ["A"],
+		key : Date.now(),
 
-				<CheckBoxGroup key="GruopINGroupA"
-				               renderFooter={()=><Text>GruopINGroupA Footer</Text>}
-				               style={{borderColor:"green",borderWidth:1,paddingLeft:10}}>
-					<Text key="INGroupA">Grouo Item INGroupA</Text>
-					<Text key="INGroupAA">Grouo Item INGroupAA</Text>
-					<Text key="INGroupAAA">Grouo Item INGroupAAA</Text>
-				</CheckBoxGroup>
+	}
 
-			</CheckBoxGroup>,
+	data = ()=> [
+				<CheckBoxGroup key="GroupA"
+			disabled={this.state.disableArr}
+		renderFooter={()=><Text>GroupA Footer</Text>}
+		style={{borderColor:"blue",borderWidth:1,paddingLeft:10}}>
+		<Text key="A">Grouo Item A</Text>
+		<Text key="AA">Grouo Item AA</Text>
+		<Text key="AAA">Grouo Item AAA</Text>
+
+		<CheckBoxGroup key="GruopINGroupA"
+		disabled={["INGroupA"]}
+		renderFooter={()=><Text>GruopINGroupA Footer</Text>}
+		style={{borderColor:"green",borderWidth:1,paddingLeft:10}}>
+		<Text key="INGroupA">Grouo Item INGroupA</Text>
+		<Text key="INGroupAA">Grouo Item INGroupAA</Text>
+		<Text key="INGroupAAA">Grouo Item INGroupAAA</Text>
+		</CheckBoxGroup>
+
+		</CheckBoxGroup>,
 
 			<CheckBoxGroup key="GruopCCC"
 			               style={{borderColor:"green",borderWidth:1,paddingLeft:10}}>
@@ -47,25 +55,25 @@ export default class MyAwesomeProject extends React.Component<object, State> {
 			<Text key="B">Item B</Text>,
 			<Text key="BB">Item BB</Text>,
 			<Text key="BBB">Item BBB</Text>,
-		],
-		key : Date.now()
-	}
+		]
 
 	add() {
-		this.state.data.push("new Add" + Date.now())
-		this.setState({data: this.state.data, key: Date.now()})
+		this.data.push("new Add" + Date.now())
+		this.setState({key: Date.now()})
 	}
 
 	del() {
-		this.state.data.pop()
-		this.setState({data: this.state.data, key: Date.now()})
+		this.data.pop()
+		this.setState({ key: Date.now()})
 	}
 
 	render() {
 
 		return (
 			<ScrollView style={{flex:1}} contentContainerStyle={styles.container}>
-
+				<Button title="get current status" onPress={()=>{
+				               	  console.log("current",this.refs.checkgp.getSelectedValue())
+				}}></Button>
 				<Button title="toogle  checkgp true" onPress={()=>{
 					this.refs.checkgp.toggle(true)
 				}}></Button>
@@ -79,6 +87,16 @@ export default class MyAwesomeProject extends React.Component<object, State> {
 				<Button title="delete Item" onPress={()=>{
 						this.del()
 				}}></Button>
+				<Button title="disable/enable A" onPress={()=>{
+					let v = [];
+					switch(this.state.disableArr.length) {
+							case 0 :v=["A"]; break;
+							case 1 : v=["A","AA"];break;
+							case 2 : v=["A","AA", "AAA"];break;
+							default : v=[]
+					}
+					this.setState({disableArr:v})
+				}}></Button>
 
 
 				<CheckBoxGroup style={{borderColor:"gray",borderWidth:1,paddingLeft:10}}
@@ -90,7 +108,7 @@ export default class MyAwesomeProject extends React.Component<object, State> {
 
 				               }}
 				>
-					{this.state.data.map((e, i) => {
+					{this.data().map((e, i) => {
 						return typeof e=="string"?<Text key={"C_"+i}>{e}</Text>:e
 					})}
 				</CheckBoxGroup>

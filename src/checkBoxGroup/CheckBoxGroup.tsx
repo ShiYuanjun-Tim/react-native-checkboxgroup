@@ -17,6 +17,8 @@ export interface  Prop  extends  SelectableProps{
 	renderFooter?:()=>React.ReactElement<any>;
 	//每次用户改变选中的行为都会触发这个callback,
 	onChange?:(k:SelectedStatus)=>void;
+	// 组内 哪些item元素是不可选的 （目前只限于非group子元素）
+	disabled?: string[];
 	/*自定义 选中状态 用方法*/
 	// renderCheckBox?:(isSelected:boolean)=>React.ReactElement<any>;
 	// rowTemplate?:(checkbox:React.ReactElement<any>,item:React.ReactElement<any>)=>React.ReactElement<any>;
@@ -38,8 +40,8 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	static IDENTIFIER = IDENTIFIER
 
 	static defaultProps={
-		renderCheckBox:(isSelected:boolean)=>{
-			return <Text>{isSelected? "On" : "Off"}  </Text>
+		renderCheckBox:(isSelected:boolean , disabled:boolean = false)=>{
+			return <Text>{disabled ? "Dis" :(isSelected? "On" : "Off" )}  </Text>
 		},
 		renderTitle:()=>{return null},
 		renderFooter:()=>{return null},
@@ -152,19 +154,27 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	}
 
 	select(cb?:Function): void {
+		const disables = this.props.disabled || [];
 		this._items.forEach((v, k) => {
-			this.bs.on(k)
-			v.select();
+			if(!disables.includes(k)){
+				this.bs.on(k)
+				v.select();
+			}
+
 		})
-		this.setState({isSelected: true},()=>{
+		this.setState({isSelected: /*(disables.length === 0) &&*/ true},()=>{
 			cb&&cb()
 		})
 	}
 
 	deselect(cb?:Function): void {
+		const disables = this.props.disabled || [];
+
 		this._items.forEach((v, k) => {
-			this.bs.off(k)
-			v.deselect();
+			if(!disables.includes(k)){
+				this.bs.off(k)
+				v.deselect();
+			}
 		})
 		this.setState({isSelected: false},()=>{
 			cb&&cb()
@@ -176,6 +186,9 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 	 * @param trueOrFalse
 	 */
 	toggle=(trueOrFalse?:boolean)=> {
+		if(this.isGroupDisabled()) {
+			return ;
+		}
 		let isRadioMode=this.isRadioMode();
 		//单选模式不能在组级调用全选，只能用于反选，但是必须明确的传入trueOrFalse =false
 		if(!isRadioMode || isRadioMode&&trueOrFalse!=undefined&&!trueOrFalse ){
@@ -232,13 +245,14 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			this.props.onChange && this.props.onChange(v?v:this.getSelectedValue(false))
 	}
 
-	private enrichChildProps = (ownKey: string) => {
+	private enrichChildProps = (childKey: string, isGroupChild: boolean =false) => {
 		//console.log("ownKey", ownKey)
-		return {
-			identifier     : ownKey,
-			key            : ownKey,
+		const disabledChildrenKeysArr = this.props.disabled || [];
+		const props:any = {
+			identifier     : childKey,
+			key            : childKey,
 			ref            : (item:any) => {
-				item && this.addItem(ownKey, item)
+				item && this.addItem(childKey, item)
 			},
 			selectedChanged: this.isRadioMode()?this.radioSelectedChanged:this.selectedChanged,
 			onChange: this.onChange,
@@ -246,14 +260,24 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			rowTemplate:this.props.rowTemplate,
 			mode:this.props.mode
 		}
+		if(!isGroupChild) { //防止覆盖group自己的同名属性
+			props.disabled= disabledChildrenKeysArr.includes(childKey);
+		}
+		return props;
 	};
 
+	private isGroupDisabled(): boolean {
+		//TODO: 不那么严格 待定
+		return (this.props.disabled || []).length === this.keys.length
+	}
 	private getTitleBar(){
-		let { renderCheckBox,isGroupTitleBarVisiable,renderTitle} = this.props;
+		let { renderCheckBox,isGroupTitleBarVisiable,renderTitle, disabled = []} = this.props;
 		return isGroupTitleBarVisiable
 			?<View style={sts.groupTitleBar}>
 				<TouchableOpacity onPress={()=>{this.toggle()}} activeOpacity={1} style={{}}>
-					{!this.isRadioMode()&&renderCheckBox&&renderCheckBox(this.state.isSelected)}
+					{!this.isRadioMode()
+					&&renderCheckBox
+					&&renderCheckBox(this.state.isSelected, disabled.length === this.keys.length)}
 				</TouchableOpacity>
 				{renderTitle&&renderTitle()}
 			</View>
@@ -273,7 +297,7 @@ export default class CheckBoxGroup extends React.Component<Prop,{isSelected: boo
 			invariant(key!=null,"%s的子元素缺少属性 key",this._identifier);
 			if (this.isSelectableComp(reactChild)) {
 				return React.cloneElement((reactChild as React.ReactElement<any>), {
-					...this.enrichChildProps(key)
+					...this.enrichChildProps(key, true)
 				})
 			} else {
 				return (

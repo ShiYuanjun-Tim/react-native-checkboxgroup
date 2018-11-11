@@ -10,6 +10,7 @@ import ReactElement = React.ReactElement;
 export interface ItemProps extends SelectableProps {
 	/*用于组件内部状态改变时候进行往上级传递使用*/
 	selectedChanged: (key: string, isSelected: boolean) => void;
+	disabled?: boolean; //是否不可选
 	onChange: (v:SelectedStatus) => void;
 	/*内部使用标记 唯一id*/
 	identifier: string;
@@ -23,6 +24,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 	static IDENTIFIER = IDENTIFIER
 
 	static defaultProps = {
+		disabled: false,
 		selectedChanged(k: string, isSelected: boolean): void{
 		},
 		renderCheckBox: (isSelected: boolean) => {
@@ -43,19 +45,28 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 	getSelectedValue() {
 		return {
 			key:this.props.identifier,
-			value:this.state.isSelected
+			value:!this.props.disabled && this.state.isSelected
 		};
 	}
 
 	select(cb?:Function): void {
+		if(this.props.disabled){
+			return;
+		}
 		this.setState({isSelected: true},()=>{cb&&cb()})
 	}
 
 	deselect(cb?:Function): void {
+		if(this.props.disabled){
+			return;
+		}
 		this.setState({isSelected: false},()=>{cb&&cb()})
 	}
 
 	toggle = () => {
+		if(this.props.disabled){
+			return;
+		}
 		let current = this.state.isSelected
 		let cb=()=>{
 			this.props.onChange && this.props.onChange({key:this.props.identifier,value: this.state.isSelected})
@@ -71,12 +82,21 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 
 	}
 
+	// public componentDidUpdate(prevProps: ItemProps) {
+	// 	//突然变不可用了， 但是目前还是on状态，此时要变不可用
+	// 	if( prevProps && this.props.disabled != prevProps.disabled
+	// 		&& this.state.isSelected
+	// 	) {
+	// 		this.toggle();
+	// 	}
+	// }
+
 	render() {
 		let {renderCheckBox,rowTemplate,identifier} = this.props
 
 		let checkbox = (
 			<TouchableOpacity onPress={this.toggle} activeOpacity={1} style={{justifyContent:"center",alignItems:"center"}}>
-				{renderCheckBox && renderCheckBox(this.state.isSelected)}
+				{renderCheckBox && renderCheckBox(this.state.isSelected, this.props.disabled)}
 			</TouchableOpacity>
 		)
 		//console.log("CheckboxItem render")

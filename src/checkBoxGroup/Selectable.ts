@@ -24,7 +24,7 @@ export  interface  Selectable {
 
 export interface SelectableProps {
 	/**用方法可以自定义 选中状态UI */
-	renderCheckBox?: (isSelected: boolean) => ReactElement<any>;
+	renderCheckBox?: (isSelected: boolean, disabled?: boolean) => ReactElement<any>;
 	/**用户自定每个选项的布局，参数是自定义过的复选框和每一行的具体内容
 	 * checkbox 已经实现了选中时间的逻辑不应该在被包在Touchable组件中
 	* */

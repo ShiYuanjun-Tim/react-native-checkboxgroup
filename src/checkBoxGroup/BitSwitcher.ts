@@ -31,12 +31,13 @@ export interface IBitSwitcher<T> {
 	on(flag: T): IBitSwitcher<T>;
 	off(flag: T): IBitSwitcher<T>
 	copyFrom(from: IBitSwitcher<T>): IBitSwitcher<T>;
-	switcherDiff(target: BitSwitcher<T>|Array<T>): {
+	switcherDiff(target: IBitSwitcher<T>|Array<T>): {
 		added: T[];
 		deleted: T[]
 		diff: boolean
 	}
 }
+/*
 
 export default class BitSwitcher<T> implements IBitSwitcher<T> {
 
@@ -65,7 +66,7 @@ export default class BitSwitcher<T> implements IBitSwitcher<T> {
 		return this.status == this.mask;
 	}
 
-	/*有一个开即为开*/
+	/!*有一个开即为开*!/
 	isOn(flag?: T) {
 		if (flag) {
 			return (this.status & this._getFlagVal(flag)) != 0
@@ -86,7 +87,7 @@ export default class BitSwitcher<T> implements IBitSwitcher<T> {
 		return this;
 	}
 
-	/*把自己的key对应的状态位从目标对象上拷贝下来*/
+	/!*把自己的key对应的状态位从目标对象上拷贝下来*!/
 	copyFrom(from: IBitSwitcher<T>) {
 		let fromKeysArr=[...from.getKeys()]
 		for (let key of this.getKeys()) {
@@ -98,7 +99,7 @@ export default class BitSwitcher<T> implements IBitSwitcher<T> {
 		return this;
 	}
 
-	/*对比是否有一样的开关位,返回不同的数组*/
+	/!*对比是否有一样的开关位,返回不同的数组*!/
 	switcherDiff(target: IBitSwitcher<T>|Array<T>) {
 		let thisK = this.getKeys(), arr1 = [...thisK].sort(), arr2;
 		if (target instanceof Array) {
@@ -141,4 +142,4 @@ export default class BitSwitcher<T> implements IBitSwitcher<T> {
 		console.log("_readable", this.status.toString(2))
 	}
 
-}
+}*/
