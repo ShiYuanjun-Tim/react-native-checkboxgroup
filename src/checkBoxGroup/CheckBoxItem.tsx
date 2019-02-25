@@ -64,7 +64,7 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 	}
 
 	toggle = () => {
-		if(this.props.disabled){
+		if(this.props.disabled && !this.state.isSelected){
 			return;
 		}
 		let current = this.state.isSelected
@@ -82,14 +82,14 @@ export default class CheckBoxItem extends React.Component<ItemProps,{isSelected:
 
 	}
 
-	// public componentDidUpdate(prevProps: ItemProps) {
-	// 	//突然变不可用了， 但是目前还是on状态，此时要变不可用
-	// 	if( prevProps && this.props.disabled != prevProps.disabled
-	// 		&& this.state.isSelected
-	// 	) {
-	// 		this.toggle();
-	// 	}
-	// }
+	public componentDidUpdate(prevProps: ItemProps) {
+		//突然变不可用了， 但是目前还是on状态，此时要变不可用
+		if( prevProps && this.props.disabled != prevProps.disabled
+			&& this.state.isSelected
+		) {
+			this.toggle();
+		}
+	}
 
 	render() {
 		let {renderCheckBox,rowTemplate,identifier} = this.props
